@@ -1,2 +1,3 @@
-# sqlnovices
-sql novices
+# SWC Data for SQL section.
+
+ 
