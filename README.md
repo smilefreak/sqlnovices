@@ -1,0 +1,2 @@
+# sqlnovices
+sql novices
