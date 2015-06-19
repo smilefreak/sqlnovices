@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; }
+code > span.dt { color: #204a87; }
+code > span.dv { color: #0000cf; }
+code > span.bn { color: #0000cf; }
+code > span.fl { color: #0000cf; }
+code > span.ch { color: #4e9a06; }
+code > span.st { color: #4e9a06; }
+code > span.co { color: #8f5902; font-style: italic; }
+code > span.ot { color: #8f5902; }
+code > span.al { color: #ef2929; }
+code > span.fu { color: #000000; }
+code > span.er { font-weight: bold; }
+  </style>
+</head>
+<body>
+<h1 id="sql-lite-notes">SQL lite notes</h1>
+<p>Get the data.</p>
+<pre><code>    mkdir swc_sql
+    cd swc_sql
+    wget http://files.software-carpentry.org/survey.db</code></pre>
+<p>Setup SQLite within the terminal.</p>
+<pre><code>    select * from site;
+    .mode column
+    .header on
+    select * from site;</code></pre>
+<h1 id="motivation">Motivation</h1>
+<p>In the late 1920s and early 1930s, William Dyer, Frank Pabodie, and Valentina Roerich led expeditions to the Pole of Inaccessibility in the South Pacific, and then onward to Antarctica. Two years ago, their expeditions were found in a storage locker at Miskatonic University. We have scanned and OCR’d the data they contain, and we now want to store that information in a way that will make search and analysis easy.</p>
+<h1 id="lesson-1.">Lesson 1.</h1>
+<h3 id="objectives.">Objectives.</h3>
+<ul>
+<li>Relational database description</li>
+<li>Tables that have columns (fields) and rows (data) or records</li>
+</ul>
+<p>You have used relational databases all you life - e.g the internet but through an interface, and these interfaces will at some point start runnning SQL commands to access and store databases.</p>
+<p>SQL is the language to interface with these, it's declarative for the most part.<br />You ask for what, it does the how. Although R with all it's packages can be a little bit like this.</p>
+<ul>
+<li>Database managers, Oracle, MySQL, Microsoft access, SQLIte do their own thing, analogy with GIT.</li>
+</ul>
+<p>SHOW website with the databases.</p>
+<p>Return to missing values later.</p>
+<p>Let's look at our tables</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">    <span class="kw">.schema</span>
+    <span class="kw">.schema</span> site</code></pre>
+<p>Ok let's select shit from them.</p>
+<pre><code>    .schema person;
+    SELECT family, personal FROM person;
+</code></pre>
+<p>It's case insensitive e.g doesn't care.</p>
+<pre><code>    SeLeCT FaMILy, PeRSONal, from PERson;
+</code></pre>
+<p>Conventions are usually to capitilize the key words, e.g uppercase for SQL statments.</p>
+<p>but it doesn't really matter a question at the end of this section will ask for your preference.</p>
+<p>Order doesn't matter it's up to you to specify, here we show column order later we will show how to do row order.</p>
+<pre><code>    SELECT personal, family, FROM person;</code></pre>
+<p>Can also repeat</p>
+<pre><code>    SELECT ident, ident, ident from person;
+</code></pre>
+<p>And finally, just like bash we can use the * to match anything.</p>
+<pre><code>    SELECT * from person;</code></pre>
+<h2 id="answers">Answers</h2>
+<ol style="list-style-type: decimal">
+<li><p>select name from site;</p></li>
+<li><p>Discussion of the answer, get students to articulate a preference.</p></li>
+</ol>
+<h1 id="lesson-2">Lesson 2</h1>
+<p>Motivations - What kind of quantitiy measurments were taken at each site; - Which scientists took measurments on the expidition - the sites where scientists took meausuremnts.</p>
+<p>Brain does not store information ...</p>
+<pre><code>    .schema survey;
+    select quant for survey;</code></pre>
+<p>Redudancy galore.</p>
+<p>NEWCOMMAND DISTINCT</p>
+<p>Introduce a key word DISTINCT explain how it returns only basically uniq</p>
+<pre><code>
+SELECT DISTINCT taken, quant from survey;
+</code></pre>
+<p>NEWCOMMAND ORDER BY the same as the uniq sort basically.</p>
+<p>Next identify the scientists measurements on the expidition.</p>
+<pre><code>    SELECT * from person;
+    SELECT * FROM person ORDER BY ident;</code></pre>
+<p>That was an ascending sort NEW WORD DESC Could also be more explicit for instance.</p>
+<pre><code>    SELECT * from person ORDER BY ident desc;
+    SELECT * from person ORDER BY ident asc;</code></pre>
+<p>Just like in bash, we can begin to combine these ideas, to perform more complex operations</p>
+<p>So to determine which scientists meausured which quantities at each site, we can look again at the survey table.</p>
+<pre><code>    SELECT taken, person, quant FROM SURVEY ORDER BY taken ASC, person DESC;</code></pre>
+<p>Some scientists may have specialised in certain kinds of measurements, here we return to the concept of distinct.</p>
+<pre><code>    SELECT quant, person FROM SURVEY ORDER by quant ASC;
+    SELECT DISTINCT quant, person FROM SURVEY ORDER BY quant ASC;</code></pre>
+<h2 id="answers-1">Answers</h2>
+<ol style="list-style-type: decimal">
+<li><p>d</p>
+<pre><code>SELECT DISTINCT dated FROM visited;
+SELECT personal, family FROM person ORDER BY family ASC;
+SELECT DISTINCT taken, person, quantity FROM survey;</code></pre></li>
+</ol>
+<h2 id="lesson-3">Lesson 3</h2>
+<p>So we can filter columns using SELECT decide on a table etc but what if we are only interested in certain values, we need to be blate to filter the rows.</p>
+<p>NEWCOMMAND WHERE clause.</p>
+<pre><code>    SELECT * FROM visited;
+    SELECT * FROM visited where site=&#39;DR-1&#39;;</code></pre>
+<p>Can filter on columns that are not displayed.</p>
+<p>Below I will explain the order of operation interactively.</p>
+<pre><code>    SELECT * FROM visited;
+    SELECT * from visited where site=&#39;DR-1&#39;;
+    SELECT ident from visited where site=&#39;DR-1&#39;;</code></pre>
+<p>The return of the boolean these can also be combined.</p>
+<p>NEWCOMMAND AND</p>
+<p>only if both statements are true will it continue</p>
+<pre><code>    SELECT * FROM visited WHERE site=&#39;DR-1&#39; AND dated&lt;&#39;1930-01-01&#39;;</code></pre>
+<p>Dates are complicated !!! very very complicated. Most DBM have them, but you will have some special support for them but SQLite doesn't. So you can store them as text a number or .</p>
+<p>measurments by lake or roe we can use the OR</p>
+<p>NEWCOMMAND OR</p>
+<p>if one statment is true it will continue.</p>
+<pre><code>   SELECT * FROM survey WHERE person=&#39;lake&#39; OR person=&#39;roe&#39;; </code></pre>
+<p>Parallels with R and the IN clause found there.</p>
+<pre><code>    SELECT * FROM survey WHERE person IN(&#39;lake&#39;,&#39;roe&#39;);</code></pre>
+<p>COMBINATION STYLE.</p>
+<pre><code>    SELECT * FROM survey WHERE quant=&#39;sal&#39; AND person=&#39;LAKE&#39; or person=&#39;roe&#39;;</code></pre>
+<p>Funny problem now the order matters</p>
+<pre><code>    SELECT * FROM survey WHERE quant=&#39;sal&#39; AND (person =&#39;lake&#39; OR person=&#39;roe&#39;);</code></pre>
+<p>We can also do partial matches, such as</p>
+<pre><code>    SELECT * FROM visited WHERE site LIKE &#39;DR%&#39;</code></pre>
+<p>Then distinct and WHERE to give a second level of filtering.</p>
+<p>COMBINATION STYLE</p>
+<pre><code>    SELECT person, quant FROM survey WHERE person=&#39;lake&#39; OR person=&#39;roe&#39;;
+    SELECT DISTINCT person, quant FROM survey WHERE person=&#39;lake&#39; OR person=&#39;roe&#39;;</code></pre>
+<p>See our queries are growing and growing.</p>
+<p>Distinct is doing stuff.</p>
+<p>If your db is large sometimes it is best to create a test db for performing test-queries on.</p>
+<h1 id="answers-2">Answers</h1>
+<pre><code>    SELECT * FROM site WHERE (lat &gt; -60) or (lat &lt; 60);
+    SELECT * FROM survey WHERE quant = &#39;sal&#39; AND reading &lt;0.0 AND reading &gt; 1.0;
+    SELECT * FROM survey WHERE person = &#39;pb&#39; AND (quant = &#39;temp&#39; OR reading &gt; 5) OR person IN(&#39;roe&#39;,&#39;lake&#39;) and reading &gt; 1;</code></pre>
+<h1 id="lesson-4">Lesson 4</h1>
+<p>New values.</p>
+<p>We need to increase a number 5% errors in teh expidition logs.</p>
+<pre><code>    SELECT 1.05 * reading FROM survey WHERE quant=&#39;rad&#39;;</code></pre>
+<p>We can do the usual temp conversion.</p>
+<pre><code>    SELECT taken, round(5*(reading-32)/9,2) FROM survey WHERE quant=&#39;temp&#39;;</code></pre>
+<p>Can also concatenate strings, to create new fields from other fields.</p>
+<pre><code>    SELECT person || &#39; &#39; || family FROM person;</code></pre>
+<h2 id="answers-3">Answers</h2>
+<pre><code>    SELECT * from survey where person =&#39;val&#39;;
+    SELECT reading/100 from survey where person =&#39;val&#39;;
+</code></pre>
+<p>Unions.</p>
+<pre><code>    SELECT * FROM person WHERE ident=&#39;dyer&#39; UNION SELECT * FROM person WHERE ident=&#39;roe&#39;;</code></pre>
+<h2 id="answers-4">Answers</h2>
+<pre><code>    SELECT * FROM survey WHERE person = &#39;pb&#39; AND (quant = &#39;temp&#39; OR reading &gt; 5) UNION SELECT * FROM survey person IN(&#39;roe&#39;,&#39;lake&#39;) and reading &gt; 1;</code></pre>
+<h2 id="lesson-5">Lesson 5</h2>
+<ul>
+<li>Explain how databases represent missing information</li>
+<li>Explain 3-valued logic that databases use when manipulating missing info</li>
+<li>Write queries that handle missing information correctly.</li>
+</ul>
+<p>It's special it actually means nothing.</p>
+<pre><code>    select * from visited;</code></pre>
+<p>It doesn't behave like other values.</p>
+<pre><code>    SELECT * FROM visited WHERE dated &lt;&#39;1930-01-01&#39;;</code></pre>
+<p>and the greater than</p>
+<pre><code>    SELECT * FROM visited WHERE dated &gt;=&#39;1930-01-01&#39;;</code></pre>
+<p>How do we get the nulls then !?!?!?!?</p>
+<pre><code>    SELECT * FROM visited WHERE dated=NULL;
+    SELECT * FROM visited WHERE dated != NULL;
+    SELECT * FROM visited WHERE dated IS NULL;</code></pre>
+<p>OR the reverse.</p>
+<pre><code>    SELECT * FROM visited WHERE dated is NOT NULL;</code></pre>
+<p>Null cause problems every where they go!</p>
+<p>Interested in salinity only</p>
+<pre><code>    SELECT * FROM survey WHERE quant=&#39;sal&#39; AND (person != &#39;lake&#39; OR person IS NULL);</code></pre>
+<p>In contrast to this aggregation functions that combine multiple values, such as min, max or avg, ignore null values.</p>
+<h2 id="answers-5">Answers</h2>
+<pre><code>    select * from visited order by date;</code></pre>
+<h2 id="lesson-6">Lesson 6</h2>
+<p>We can also calculate ranges and averages for our data. We'll start simple as always say we know how to select all of the dates from.</p>
+<pre><code>    SELECT dated from Visited;</code></pre>
+<p>But to combine them we need to aggregate them using functions.</p>
+<p>NEWCOMMANDS</p>
+<p>MIN and MAX.</p>
+<pre><code>    SELECT min(dated) FROM visited;
+    SELECT max(dated) FROM visited;</code></pre>
+<p>NEWCOMMANDS</p>
+<p>AVG, COUNT, and SUM</p>
+<pre><code>    SELECT avg(reading) FROM survey WHERE quant=&#39;sal&#39;;
+    SELECT count(reading) FROM survey WHERE quant=&#39;sal&#39;;
+    SELECT sum(reading) FROM survey WHERE quant=&#39;sal&#39;;</code></pre>
+<p>Can use count on anything, just counts the rows.</p>
+<pre><code>    SELECT count(*) from survey WHERE quant=&#39;sal&#39;;</code></pre>
+<p>Muliple aggregations</p>
+<pre><code>    SELECT min(reading), max(reading) FROM survey WHERE quant=&#39;sal&#39; AND reading &lt;= 1.0;</code></pre>
+<p>Combine the aggregated results, although the output may suprise you.</p>
+<pre><code>    SELECT person, count(*) FROM survey WHERE quant=&#39;sal&#39; AND reading&lt;=1.0;</code></pre>
+<p>When there are now values, the result is don't know rather than zero or some arbitrary values</p>
+<pre><code>    SELECT person, max(reading), sum(reading) FROM survey WHERE quant=&#39;missing&#39;;</code></pre>
+<p>They totally ignore the nulls, so everything is fine.</p>
+<pre><code>    SELECT date from visited;
+    SELECT min(dated) from visited;</code></pre>
+<p>Instead of filtering explicitly.</p>
+<pre><code>    SELECT min(dated) FROM visited WHERE dated IS NOT NULL;</code></pre>
+<p>Systematic bias.</p>
+<pre><code>    SELECT person, count(reading), round(avg(reading), 2)
+    FROM survey WHERE quant=&#39;rad&#39;;</code></pre>
+<p>Doesn't work shat the bed.</p>
+<p>Could do individual.</p>
+<p>But</p>
+<p>NEWCOMMAND GROUP BY</p>
+<pre><code>    SELECT person, count(reading) round(avg(reading), 2)
+    FROM survey WHERE quant=&#39;rad&#39; GROUP BY person;</code></pre>
+<p>Can use mutiple</p>
+<pre><code>    SELECT person, quant, count(reading), round(avg(reading), 2)
+    FROM survey GROUP BY person, quant;
+    SELECT person, quant, count(reading), round(avg(reading), 2)
+    FROM SURVEY 
+    WHERE PERSON IS NOT NULL
+    GROUP by person, quant
+    ORDER by person, quant;</code></pre>
+</body>
+</html>
