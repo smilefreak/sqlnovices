@@ -1,0 +1,158 @@
+---
+title       : SQL session SWC
+subtitle    : Learning SQL
+author      : James Boocock
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Lesson set-up.
+
+Open a terminal and run the following commands in a working directory
+
+```
+    mkdir swc_sql
+    cd swc_sql
+    wget http://files.software-carpentry.org/survey.db
+
+```
+
+---
+
+## Lesson 1 - Challenges.
+
+1. Write a query that selects only site names from the ```Site``` table.
+
+2. Query preference. 
+
+    Many people format queries as:
+    ```
+        SELECT personal, family FROM person;
+    ```
+    or as:
+    ```
+        select Personal, Family from PERSON;
+    ```
+    What style do you find easiest to read, and why?
+
+
+---
+
+## Lesson 2 - Challenges
+
+
+1. Which lines will remain in the following SQL output if distinct is added?
+
+```
+4	hello	ten
+4	hello	ten
+4	welldone	ten
+5	hello	ten
+5	hello	bazaar
+
+```
+a) 1 and 4   b) 1,3, and 4 
+
+c) 1 and 5   d) 1,3,4, and 5
+
+---
+
+## Lesson 2 - Challenges cont.
+
+1. Write a query that selects distinct dates from the ```visited``` table?
+
+2. Write a query that displays the full names of the scientists in the ```person``` table, ordered by family name.
+
+3. Write a query that displays the distinct taken, person and quantity triples from the ```survey``` table.
+
+---
+
+## Lesson 3 - Challenges
+
+1. Suppose we want to select all sites that lie more than 30 degrees from the poles.
+
+    ```
+    SELECT * FROM site WHERE (lat > -60) OR (lat < 60);
+    ```
+
+    Explain why this is wrong and rewrite the query so that it is correct.
+
+2. Finding outliers, normalized salinity readings are suppossed to between 0.0 and 1.0. Write a query that selects all records from ```survey``` with salinity values outside this range.
+
+3. EXTENSION. Identify erroneous measurments. Write a query that will display all of Pb's measurments that are either temperature or have readings greater than 5. Also, in the same query display the salinity measurements taken by Roe or Lake that have values exceeding 1. 
+
+    Remember to build up queries little by little.
+
+---
+
+## Lesson 4 - Challenges
+
+1. Val has entered her salinity data as percentages not proportions. Write a query that displays all of her salinity measurements from the ```survey``` table with the values divided by 100.
+
+2. Identify erroneous measurments. Write a query that will display all of Pb's measurments that are either temperature or have readings greater than 5. Also, in the same query display the salinity measurements taken by Roe or Lake that have values exceeding 1.  Write this query using the UNION operator.
+
+---
+
+## Lesson 5 - Challenges
+
+1. Write a query that sorts the records in ```visited``` by date, omitting those entires for which the date is not known i.e is null
+
+2. Some people prefer sentinel value to mark null's. Dates like "0000-00-00". What are the benefits and costs of this approach, discuss.
+
+   
+
+
+---
+
+
+## Lesson 6 - Challenges
+
+1. How many temperature readings did Pb record and what was their average value?
+
+2. What does the following query produce and why?
+
+    ``` 
+        SELECT reading - avg(reading) FROM survey WHERE quant='rad';
+    ```
+
+3. The average of a set of values is the sum divided by the number of values. 
+   Does this mean that the ```avg``` function returns 2.0 or 3.0 when given the values 1.0, ```null```, and 5.0?
+
+
+---
+
+## Lesson 7 - Challenges
+
+1. Write a query that lists all non-null radiation readings from the DR-1 Site.
+
+2. Write a query that lists all sites visited by people whose last names contain a a "a": Hint LIKE "%a%" will match any a's in a text field.
+
+3. Describe in your own words what the following query produces:
+   
+    ```
+    SELECT Site.name FROM Site JOIN Visited
+    ON site.name=Visited.site WHERE Visited.dated>='1932-01-01' AND Site.lat<-49.0;
+    ```
+
+---
+
+## Lesson 8 - Challenges
+
+1. Which of the following are atomic values? Which are not? Why?
+    - New Zealand
+    - 87 Turing avenue
+    - January 25, 1971
+    - the XY coordinate (0.5, 3.3)
+
+2. What is the primary key in this table? i.e what value or combination of values uniquely identifies a record?
+
+    | *latitude* | *longitude* | *date* | *temperature* |
+    | 57.3   | -22.5 | 2015-10-09 | -14.2 |
+    | 57.3   | -19.3 | 2015-10-09 | -14.2 |
+    | 14.3   | -19.3 | 2015-10-10 | -14.2 | 
+
